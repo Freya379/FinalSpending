@@ -23,7 +23,7 @@ router.get('/account', checkLoginMiddleware, function(req, res, next) {
   //读取集合信息
   AccountModel.find().sort({time: -1}).exec((err, data) => {
     if(err){
-      res.status(500).send('读取失败~~~');
+      res.status(500).send('Fail to Read the data~');
       return;
     }
     //响应成功的提示
@@ -45,11 +45,11 @@ router.post('/account',checkLoginMiddleware, (req, res) => {
     time: moment(req.body.time).toDate()
   }, (err, data) => {
     if(err){
-      res.status(500).send('插入失败~~');
+      res.status(500).send('fail to insert the data~~');
       return
     }
     //成功提醒
-    res.render('success', {msg: '添加成功哦~~~', url: '/account'});
+    res.render('success', {msg: 'succssfully inserted~~~', url: '/account'});
   })
 });
 
@@ -60,11 +60,11 @@ router.get('/account/:id', checkLoginMiddleware, (req, res) => {
   //删除
   AccountModel.deleteOne({_id: id}, (err, data) => {
     if(err) {
-      res.status(500).send('删除失败~');
+      res.status(500).send('Fail to delet the data');
       return;
     }
     //提醒
-    res.render('success', {msg: '删除成功~~~', url: '/account'});
+    res.render('success', {msg: 'succssfully deleted the data~~~', url: '/account'});
   })
 });
 

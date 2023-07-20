@@ -1,137 +1,137 @@
-//导入 express
+// Import express
 const express = require('express');
-//导入 jwt
+// Import jwt
 const jwt = require('jsonwebtoken');
-//导入中间件
+// Import middleware
 let checkTokenMiddleware = require('../../middlewares/checkTokenMiddleware');
 
 const router = express.Router();
-//导入 moment
+// Import moment
 const moment = require('moment');
 const AccountModel = require('../../models/AccountModel');
 
-//记账本的列表
+// Account book list
 router.get('/account', checkTokenMiddleware, function (req, res, next) {
-  //读取集合信息
+  // Read collection information
   AccountModel.find().sort({ time: -1 }).exec((err, data) => {
     if (err) {
       res.json({
         code: '1001',
-        msg: '读取失败~~',
+        msg: 'Fail to Read the data',
         data: null
       })
       return;
     }
-    //响应成功的提示
+    // Respond with success message
     res.json({
-      //响应编号
+      // Response code
       code: '0000',
-      //响应的信息
-      msg: '读取成功',
-      //响应的数据
+      // Response message
+      msg: 'Successfully read the data',
+      // Response data
       data: data
     });
   })
 });
 
-//新增记录
+// Add record
 router.post('/account', checkTokenMiddleware, (req, res) => {
-  //表单验证
+  // Form validation
 
-  //插入数据库
+  // Insert into the database
   AccountModel.create({
     ...req.body,
-    //修改 time 属性的值
+    // Modify the value of the time attribute
     time: moment(req.body.time).toDate()
   }, (err, data) => {
     if (err) {
       res.json({
         code: '1002',
-        msg: '创建失败~~',
+        msg: 'Failed to create',
         data: null
       })
       return
     }
-    //成功提醒
+    // Success reminder
     res.json({
       code: '0000',
-      msg: '创建成功',
+      msg: 'Creation successful',
       data: data
     })
   })
 });
 
-//删除记录
+// Delete record
 router.delete('/account/:id', checkTokenMiddleware, (req, res) => {
-  //获取 params 的 id 参数
+  // Get the id parameter from params
   let id = req.params.id;
-  //删除
+  // Delete
   AccountModel.deleteOne({ _id: id }, (err, data) => {
     if (err) {
       res.json({
         code: '1003',
-        msg: '删除账单失败',
+        msg: 'Failed to delete the record',
         data: null
       })
       return;
     }
-    //提醒
+    // Reminder
     res.json({
       code: '0000',
-      msg: '删除成功',
+      msg: 'Successfully deleted',
       data: {}
     })
   })
 });
 
-//获取单个账单信息
+// Get single record information
 router.get('/account/:id', checkTokenMiddleware, (req, res) => {
-  //获取 id 参数
+  // Get id parameter
   let { id } = req.params;
-  //查询数据库
+  // Query the database
   AccountModel.findById(id, (err, data) => {
     if (err) {
       return res.json({
         code: '1004',
-        msg: '读取失败~~',
+        msg: 'Fail to Read the data',
         data: null
       })
     }
-    //成功响应
+    // Successful response
     res.json({
       code: '0000',
-      msg: '读取成功',
+      msg: 'Successfully read the data',
       data: data
     })
   })
 });
 
-//更新单个账单信息
+// Update single record information
 router.patch('/account/:id', checkTokenMiddleware, (req, res) => {
-  //获取 id 参数值
+  // Get id parameter value
   let { id } = req.params;
-  //更新数据库
+  // Update the database
   AccountModel.updateOne({ _id: id }, req.body, (err, data) => {
     if (err) {
       return res.json({
         code: '1005',
-        msg: '更新失败~~',
+        msg: 'Update failed~~',
         data: null
       })
     }
-    //再次查询数据库 获取单条数据
+    // Query the database again to get single record
     AccountModel.findById(id, (err, data) => {
       if (err) {
         return res.json({
           code: '1004',
-          msg: '读取失败~~',
+          msg: 'Fail to Read the data~',
           data: null
         })
       }
-      //成功响应
+      // Successful response
       res.json({
         code: '0000',
-        msg: '更新成功',
+        msg: 'Update successful',
         data: data
       })
     })

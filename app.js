@@ -19,7 +19,7 @@ var app = express();
 //设置 session 的中间件
 app.use(session({
   name: 'sid',   //设置cookie的name，默认值是：connect.sid
-  secret: 'atguigu', //参与加密的字符串（又称签名）  加盐
+  secret: 'helloWorld', //参与加密的字符串（又称签名）  加盐
   saveUninitialized: false, //是否为每次请求都设置一个cookie用来存储session的id
   resave: true,  //是否在每次请求时重新保存session  20 分钟    4:00  4:20
   store: MongoStore.create({

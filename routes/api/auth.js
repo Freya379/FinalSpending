@@ -18,7 +18,7 @@ router.post('/login', (req, res) => {
     if(err){
       res.json({
         code: '2001',
-        msg: '数据库读取失败~~~',
+        msg: 'Fail to Read the data',
         data: null
       })
       return
@@ -27,7 +27,7 @@ router.post('/login', (req, res) => {
     if(!data){
       return res.json({
         code: '2002',
-        msg: '用户名或密码错误~~~',
+        msg: 'username or password is wrong',
         data: null
       })
     }
@@ -43,7 +43,7 @@ router.post('/login', (req, res) => {
     //响应 token
     res.json({
       code: '0000',
-      msg: '登录成功',
+      msg: 'Get in',
       data: token
     })
 
@@ -55,7 +55,7 @@ router.post('/login', (req, res) => {
 router.post('/logout', (req, res) => {
   //销毁 session
   req.session.destroy(() => {
-    res.render('success', {msg: '退出成功', url: '/login'});
+    res.render('success', {msg: 'Log out', url: '/login'});
   })
 });
 

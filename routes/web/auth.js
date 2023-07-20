@@ -1,65 +1,65 @@
 var express = require('express');
 var router = express.Router();
-//导入 用户的模型
+// Import the User Model
 const UserModel = require('../../models/UserModel');
 const md5 = require('md5');
-//注册
+// Registration
 router.get('/reg', (req, res) => {
-  //响应 HTML 内容
+  // Respond with HTML content
   res.render('auth/reg');
 });
 
-//注册用户
+// Register user
 router.post('/reg', (req, res) => {
-  //做表单验证
-  //获取请求体的数据
+  // Perform form validation
+  // Get the request body data
   UserModel.create({...req.body, password: md5(req.body.password)}, (err, data) => {
     if(err){
-      res.status(500).send('注册失败, 请稍后再试~~');
+      res.status(500).send('Registration failed, please try again later~~');
       return
     }
-    res.render('success', {msg: '注册成功', url: '/login'});
+    res.render('success', {msg: 'Registration successful', url: '/login'});
   })
   
 });
 
 
-//登录页面
+// Login page
 router.get('/login', (req, res) => {
-  //响应 HTML 内容
+  // Respond with HTML content
   res.render('auth/login');
 });
 
-//登录操作
+// Login operation
 router.post('/login', (req, res) => {
-  //获取用户名和密码
+  // Get username and password
   let {username, password} = req.body;
-  //查询数据库
+  // Query the database
   UserModel.findOne({username: username, password: md5(password)}, (err, data) => {
-    //判断
+    // judgment
     if(err){
-      res.status(500).send('登录, 请稍后再试~~');
+      res.status(500).send('Login, please try again later~~');
       return
     }
-    //判断 data
+    // judge data
     if(!data){
-      return res.send('账号或密码错误~~');
+      return res.send('Incorrect username or password~~');
     }
-    //写入session
+    // Write into session
     req.session.username = data.username;
     req.session._id = data._id;
 
-    //登录成功响应
-    res.render('success', {msg: '登录成功', url: '/account'});
+    // Successful login response
+    res.render('success', {msg: 'Login successful', url: '/account'});
   })
 
 });
 
-//退出登录
+// Log out
 router.post('/logout', (req, res) => {
-  //销毁 session
+  // Destroy the session
   req.session.destroy(() => {
-    res.render('success', {msg: '退出成功', url: '/login'});
+    res.render('success', {msg: 'Logged out successfully', url: '/login'});
   })
 });
 

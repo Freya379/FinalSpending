@@ -29,21 +29,21 @@
         <div class="row text-right">
           <div class="col-xs-12" style="padding-top: 20px">
             <form method="post" action="/logout">
-              <button class="btn btn-danger">退出</button>
+              <button class="btn btn-danger">Exit</button>
             </form>
           </div>
         </div>
         <hr>
         <div class="row">
-          <h2 class="col-xs-6">记账本</h2>
-          <h2 class="col-xs-6 text-right"><a href="/account/create" class="btn btn-primary">添加账单</a></h2>
+          <h2 class="col-xs-6">Personal Cash inflow & outflow Records</h2>
+          <h2 class="col-xs-6 text-right"><a href="/account/create" class="btn btn-primary">Adding the Records</a></h2>
         </div>
         <hr />
         <div class="accounts">
           <% accounts.forEach(item=> { %>
             <div class="panel <%= item.type=== -1 ? 'panel-danger' : 'panel-success'  %>">
               <div class="panel-heading">
-                <%= moment(item.time).format('YYYY-MM-DD') %>
+                <%= moment(item.time).format('MM-DD-YYYY') %>
               </div>
               <div class="panel-body">
                 <div class="col-xs-6">
@@ -51,11 +51,11 @@
                 </div>
                 <div class="col-xs-2 text-center">
                   <span class="label <%= item.type=== -1 ? 'label-warning' : 'label-success'  %>">
-                    <%= item.type===-1 ? '支出' : '收入' %>
+                    <%= item.type===-1 ? 'Spending' : 'Income' %>
                   </span>
                 </div>
                 <div class="col-xs-2 text-right">
-                  <%= item.account %> 元
+                  <%= item.account %> dollars
                 </div>
                 <div class="col-xs-2 text-right">
                   <a class="delBtn" href="/account/<%= item._id %>">
@@ -78,7 +78,7 @@
   //绑定事件
   delBtns.forEach(item => {
     item.addEventListener('click', function (e) {
-      if (confirm('您确定要删除该文档么??')) {
+      if (confirm('Are you sure to delet this records??')) {
         return true;
       } else {
         //阻止默认行为
